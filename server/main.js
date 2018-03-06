@@ -1,4 +1,4 @@
-const startDb = require('./db');
+// const startDb = require('./db');
 const server = require('http').createServer();
 
 function createApplication() {
@@ -11,7 +11,7 @@ function startServer() {
 	server.listen(PORT, () => console.log('Server started on port', PORT));
 }
 
-startDb
-.then(createApplication)
-.then(startServer)
-.catch(err => console.error(err.stack));
+// startDb
+createApplication()
+startServer()
+// .catch(err => console.error(err.stack));

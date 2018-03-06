@@ -28,6 +28,7 @@
     "pg-hstore": "^2.3.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "semantic-ui-react": "^0.71.4",
     "sequelize": "^3.30.2",
     "volleyball": "^1.4.1",
     "webpack": "^2.2.1"

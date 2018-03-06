@@ -1,0 +1,59 @@
+body {
+  display: flex;
+  justify-content: center;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  font-size: 4em;
+  margin-left: .7em;
+  margin-top: 2em !important;
+}
+
+.word {
+  font-size: 3em;
+  padding-top: 1em;
+}
+
+.guesses {
+  font-size: 3em;
+  padding: .5em;
+  flex-wrap: wrap;
+}
+
+.btm {
+  padding: 2em;
+}
+
+.placeholder-container {
+  font-size: 4em;
+  padding-top: .5em;
+  padding-bottom: .5em;
+  margin: auto;
+}
+
+.placeholder {
+  padding-left: .1em;
+  padding-right: .1em;
+}
+
+.input {
+  margin-left: 2em;
+}
+
+.playBtn {
+  height: 3em;
+  width: 4em;
+  padding: 0 !important;
+  text-align: center !important;
+  margin-top: 3em !important;
+  margin-left: 2em !important;
+}
