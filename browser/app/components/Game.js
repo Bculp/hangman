@@ -3,7 +3,7 @@ import { Button, Modal, Visibility, Input } from 'semantic-ui-react';
 
 const initialState = {difficulty: '', categories: [], category: '', lives: 0, score: 0, word: '', guess: [], status: '', pastWords: [], mode: ''};
 const alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-const staticCategories = [{title: 'Animals', items: ['Dog', 'Bird']}, {title: 'Sports', items: ['Football', 'Soccer']}]
+const staticCategories = [{title: 'Activity 1', items: ['Testing activity item']}, {title: 'Activity 2', items: ['Football', 'Soccer']}]
 let disabledBtns = [], activeCategory = {};
 
 export default class Game extends Component {
@@ -68,19 +68,19 @@ export default class Game extends Component {
   }
 
   determineLives(difficulty) {
-    let lives = 0;
-    switch(difficulty) {
-      case 'Easy':
-        lives = 5;
-        break;
-      case 'Medium':
-        lives = 3;
-        break;
-      case 'Hard':
-        lives = 1;
-        break;
-    }
-    return lives
+    // let lives = 0;
+    // switch(difficulty) {
+    //   case 'Easy':
+    //     lives = 5;
+    //     break;
+    //   case 'Medium':
+    //     lives = 3;
+    //     break;
+    //   case 'Hard':
+    //     lives = 1;
+    //     break;
+    // }
+    return 5;
   }
 
   handleClick(e, typeOfElement) {
@@ -202,7 +202,7 @@ export default class Game extends Component {
             <h5 className="center">Select the number of players</h5>
             <div className="center">
               <Button className="center" onClick={(e) => this.startGame(e.target.textContent)}>One</Button>
-              <Button className="center" onClick={(e) => this.startGame(e.target.textContent)}>Two</Button>
+              {/* <Button className="center" onClick={(e) => this.startGame(e.target.textContent)}>Two</Button> */}
             </div>
           </Modal.Content>
         </Modal>
