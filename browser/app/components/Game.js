@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Button, Modal, Visibility, Input } from 'semantic-ui-react';
 
-const initialState = {difficulty: '', categories: [], category: '', lives: 0, score: 0, word: '', guess: [], status: '', pastWords: [], mode: ''};
+const initialState = {categories: [], category: '', lives: 5, score: 0, word: '', guess: [], status: '', pastWords: [], mode: ''};
 const alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-// const staticCategories = [{title: 'Activity 1', items: ['Testing activity item']}, {title: 'Activity 2', items: ['Football', 'Soccer']}];
-const staticCategories = ['Activity 1', 'Activity 2', 'Meal'];
-const answers = ['Art and Park', 'Wine and cheese', 'Healthy meal'];
+const staticCategories = ['Activity 1', 'Activity 2', 'Activity 3'];
+const answers = ['art', 'fruity deliciousness', 'seasonal dinner'];
 let disabledBtns = [], activeCategory = {};
 
 export default class Game extends Component {
@@ -36,18 +35,28 @@ export default class Game extends Component {
   handleClick(e) {
     const text = e.textContent;
     let answer;
+    let guess;
+    function createPlaceholder() {
+      let spaceIndex = answer.indexOf(' ');
+      guess = '_'.repeat(answer.length).split('');
+      guess[spaceIndex] = ' ';
+    }
+    
     if (text === 'Activity 1') {
       answer = answers[0];
+      createPlaceholder();
     } else if (text === 'Activity 2') {
       answer = answers[1];
+      createPlaceholder();
     } else {
       answer = answers[2];
+      createPlaceholder();
     }
     this.setState({
       lives: 5,
       word: answer,
       category: text,
-      guess: []
+      guess
     });
     this.enableBtns();
     this.refs.start_game.handleClose();
@@ -95,12 +104,10 @@ export default class Game extends Component {
   }
 
   playAgain(yes) {
-    // Single player play again --- NEED TO TEST!!
+    this.refs.play_again.handleClose();
     this.refs.start_game.handleOpen();
-    this.refs.play_again.handleClose()
-    // let newState = Object.assign({}, this.state, { lives: 5, word: wordPastWordsGuess[0], guess: wordPastWordsGuess[2], status: '', pastWords: wordPastWordsGuess[1] })
-    // this.enableBtns()
-    // this.setState(newState)
+    this.enableBtns();
+    this.setState(initialState);
   }
 
   enableBtns() {
@@ -120,13 +127,13 @@ export default class Game extends Component {
             <div className="center">
               <Button className="center" onClick={(e) => this.handleClick(e.target)}>Activity 1</Button>
               <Button className="center" onClick={(e) => this.handleClick(e.target)}>Activity 2</Button>
-              <Button className="center" onClick={(e) => this.handleClick(e.target)}>Meal</Button>
+              <Button className="center" onClick={(e) => this.handleClick(e.target)}>Activity 3</Button>
             </div>
           </Modal.Content>
         </Modal>
         <Modal ref="play_again" size="tiny">
           <Modal.Content>
-          <h3 className="center">{this.state.status}</h3>
+          <h3 className="center">{`${this.state.status} The answer is: ${this.state.word}`}</h3>
           <h5 className="center">Play Again?</h5>
           <div className="center">
             <Button onClick={this.playAgain}>Yes</Button>
@@ -155,7 +162,6 @@ export default class Game extends Component {
         </div>
         <div className="center">
           <div className="btm lives" ref="lives">Lives: { this.state.lives }</div>
-          <div className="btm score">Score: { this.state.score }</div>
           {this.state.status === 'You Won!' || this.state.status === 'You Lost!' ? this.refs.play_again.handleOpen() : ''}
         </div>
       </div>
