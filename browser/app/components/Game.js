@@ -1,66 +1,61 @@
 import React, { Component } from 'react';
-import { Button, Modal, Visibility, Input } from 'semantic-ui-react';
+import { Button, Modal } from 'semantic-ui-react';
+import './style.css';
 
-const initialState = {categories: [], category: '', lives: 5, word: '', guess: [], status: '', mode: ''};
+const initialState = {categories: [], category: '', lives: 6, word: '', guess: [], status: '', mode: 'Single Player'};
 const alpha = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-const staticCategories = ['Activity 1', 'Activity 2', 'Activity 3'];
-const answers = ['art', 'fruity deliciousness', 'seasonal dinner'];
+const answers = {
+  Mom: 'Kitchen', 
+  Todd: 'Basement',
+  Juliens: 'Laundry'
+};
 let disabledBtns = [];
 
 export default class Game extends Component {
   constructor(props) {
     super(props);
     this.state = initialState;
-    this.handleClick = this.handleClick.bind(this);
-    this.handleGuess = this.handleGuess.bind(this);
+    this.determinePlayer = this.determinePlayer.bind(this);
     this.playAgain = this.playAgain.bind(this);
+    this.createPlaceholder = this.createPlaceholder.bind(this);
+    this.handleGuess = this.handleGuess.bind(this);
     this.enableBtns = this.enableBtns.bind(this);
     this.startGame = this.startGame.bind(this);
   }
 
   componentDidMount() {
-    this.setState({
-      categories: staticCategories
-    });
+    const player = this.determinePlayer()
+    this.createPlaceholder(player);
     this.refs.start_game.handleOpen();
+  }
+
+  determinePlayer() {
+    // Pull query string and call createPlaceholder
+    const qs = window.location.search;
+    const player = qs.split('=')[1];
+
+    this.setState({player})
+    return player;
   }
 
   startGame() {
     this.refs.start_game.handleClose();
-    return this.setState({
-      mode: 'Single Player'
-    });
+    this.enableBtns();
   }
 
-  handleClick(e) {
-    const text = e.textContent;
-    let answer;
+  createPlaceholder(player) {
+    // Pull answer based on player
+    const answer = answers[player];
     let guess;
-    function createPlaceholder() {
-      const spaceIndex = answer.indexOf(' ');
-      guess = '_'.repeat(answer.length).split('');
-      guess[spaceIndex] = ' ';
-    }
 
-    if (text === 'Activity 1') {
-      answer = answers[0];
-      createPlaceholder();
-    } else if (text === 'Activity 2') {
-      answer = answers[1];
-      createPlaceholder();
-    } else {
-      answer = answers[2];
-      createPlaceholder();
-    }
+    const spaceIndex = answer.indexOf(' ');
+    guess = '_'.repeat(answer.length).split('');
+    guess[spaceIndex] = ' ';
+
     this.setState({
-      lives: 5,
       word: answer,
-      category: text,
-      guess,
-      status: ''
+      guess
     });
-    this.enableBtns();
-    this.refs.start_game.handleClose();
   }
 
   handleGuess(e) {
@@ -106,9 +101,10 @@ export default class Game extends Component {
 
   playAgain() {
     this.refs.play_again.handleClose();
-    this.refs.start_game.handleOpen();
-    this.enableBtns();
     this.setState(initialState);
+    const player = this.determinePlayer()
+    this.createPlaceholder(player);
+    this.startGame();
   }
 
   enableBtns() {
@@ -123,51 +119,38 @@ export default class Game extends Component {
       <div className="container">
         <Modal ref="start_game" size="tiny" dimmer="blurring">
           <Modal.Content>
-            <h3 className="center">Welcome to Hangman! </h3>
-            <h5 className="center">Select an activity</h5>
+            <h3 className="center">{`Welcome to Christmas Hangman, ${this.state.player}!`}</h3>
+            <h5 className="center">Solve the puzzle to find your present!</h5>
             <div className="center">
               <Button
-                className="center"
-                onClick={e => this.handleClick(e.target)}
-              >Activity 1
-              </Button>
-              <Button
-                className="center"
-                onClick={e => this.handleClick(e.target)}
-              >Activity 2
-              </Button>
-              <Button
-                className="center"
-                onClick={e => this.handleClick(e.target)}
-              >Activity 3
+                className="center start-game"
+                onClick={e => this.startGame()}
+              >Begin!
               </Button>
             </div>
           </Modal.Content>
         </Modal>
         <Modal ref="play_again" size="tiny">
           <Modal.Content>
-            <h3 className="center">{`${this.state.status} The answer is: ${this.state.word}`}</h3>
-            <h5 className="center">Play Again?</h5>
-            <div className="center">
-              <Button onClick={this.playAgain}>Yes</Button>
-              <Button onClick={() => this.refs.play_again.handleClose()}>No</Button>
-            </div>
+            <h3 className="center">{`${this.state.status}`}</h3>
+            {
+              this.state.status === 'You Won!' ?
+                <h4 className="center">{`Your present is in the ${this.state.word}!`}</h4>
+              :
+              <div className="center">
+                <Button onClick={this.playAgain}>Try Again</Button>
+              </div>
+            }
           </Modal.Content>
         </Modal>
-        <ul className="center categories">
-          {staticCategories.map((category, index) => {
-            return (
-              <Button
-                color="olive"
-                key={index}
-                compact
-                onClick={(e) => this.handleClick(e.target)}
-              >{category}
-              </Button>
-            );
-          })
-        }
-        </ul>
+        <div className="center character">
+          <div className={`head${this.state.lives < 6 ? ' visible' : ' hidden'}`}></div>
+          <div className={`body${this.state.lives < 5 ? ' visible' : ' hidden'}`}></div>
+          <div className={`left-arm${this.state.lives < 4 ? ' visible' : ' hidden'}`}></div>
+          <div className={`right-arm${this.state.lives < 3 ? ' visible' : ' hidden'}`}></div>
+          <div className={`left-leg${this.state.lives < 2 ? ' visible' : ' hidden'}`}></div>
+          <div className={`right-leg${this.state.lives < 1 ? ' visible' : ' hidden'}`}></div>
+        </div>
         <div className="center placeholder-container">
           {this.state.guess.map((letter, index) => {
             return <div key={index} className="placeholder">{letter}</div>;
@@ -189,7 +172,6 @@ export default class Game extends Component {
           }
         </div>
         <div className="center">
-          <div className="btm lives" ref="lives">Lives: { this.state.lives }</div>
           {this.state.status === 'You Won!' || this.state.status === 'You Lost!' ? this.refs.play_again.handleOpen() : ''}
         </div>
       </div>
