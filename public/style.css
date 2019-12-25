@@ -88,6 +88,10 @@ ul {
 }
 
 @media (max-width: 800px) {
+  .placeholder-container {
+    font-size: 3.2em;
+  }
+
   .title {
     font-size: 2.5em;
   }
