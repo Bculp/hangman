@@ -16,6 +16,10 @@ ul {
   color: black;
 }
 
+.modal h3, h5 {
+  margin: 12px;
+}
+
 .center {
   display: flex;
   justify-content: center;

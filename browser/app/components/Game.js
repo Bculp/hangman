@@ -171,8 +171,13 @@ export default class Game extends Component {
             })
           }
         </div>
-        <div className="center">
-          {this.state.status === 'You Won!' || this.state.status === 'You Lost!' ? this.refs.play_again.handleOpen() : ''}
+        <div className="center hidden">
+          {
+            this.state.status === 'You Won!' || this.state.status === 'You Lost!' ?
+              window.setTimeout(() => this.refs.play_again.handleOpen(),400)
+              : 
+              ''
+          }
         </div>
       </div>
     );
