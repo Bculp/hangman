@@ -4,16 +4,17 @@ module.exports = {
 		path: __dirname,
 		filename: './public/bundle.js',
 		publicPath: '/'
-	},
+  },
+  mode: "production",
 	module: {
-		loaders: [
+    rules: [
 			{
-				test: /\.js$/,
-				exclude: /node_modules/,
-				loader: "babel-loader",
-				query: {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader",
+        options: {
 					presets: ['react', 'es2015']
-				}
+        }
 			}
 		]
 	}
